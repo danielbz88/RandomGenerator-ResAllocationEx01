@@ -1,18 +1,18 @@
-import java.io.IOException;
-import java.util.ArrayList;
 import java.util.Arrays;
 
 
 public class Main {
-	public static final int M = 100;
+	public static final int M = 12500;
 	public static final int a = 80;
 	
 	public static void main(String []args) {
 		
 		RandomNumberGenerator.generateParedoSpread();
-		System.out.println(RandomNumberGenerator.getParedoArray());
-		System.out.println("Percentile = " + RandomNumberGenerator.getParedoRandomNumber());
+//		System.out.println(RandomNumberGenerator.getParedoArray());
 
+		for (int i = 0; i < 20; i++){
+			System.out.println("Percentile = " + RandomNumberGenerator.getParedoRandomNumber() + "%");
+		}
 	}
 	
 	public static class RandomNumberGenerator {
@@ -24,17 +24,17 @@ public class Main {
 			return output;
 		}
 		
-		public static double getParedoRandomNumber(){
+		public static int getParedoRandomNumber(){
 			int percentile;
 			double uniRandom = generateUniformRandomNumber();
-			System.out.println("uniRandom = " + uniRandom);
+//			System.out.println("uniRandom = " + uniRandom);
 			percentile = Arrays.binarySearch(array, uniRandom);
 			
 			if (percentile < 0) {
 				percentile = -1 * percentile - 1;
 			}
 						
-			return percentile + 1;
+			return ((percentile * 100) / Main.M) + 1;
 		}
 		
 		public static String getParedoArray(){
