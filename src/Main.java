@@ -1,5 +1,6 @@
 import java.io.IOException;
-
+import java.util.ArrayList;
+import java.util.Arrays;
 
 
 public class Main {
@@ -7,60 +8,70 @@ public class Main {
 	public static final int a = 80;
 	
 	public static void main(String []args) {
-		for(int i = 0; i < 15; i++){
-			System.out.println(RandomNumberGenerator.getRandomNumber());
-		}
 		
-		try {
-			System.in.read();
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+		RandomNumberGenerator.generateParedoSpread();
+		System.out.println(RandomNumberGenerator.getParedoArray());
+		System.out.println("Percentile = " + RandomNumberGenerator.getParedoRandomNumber());
+
 	}
 	
 	public static class RandomNumberGenerator {
 		private static long z = System.currentTimeMillis();
 		private static double[] array = new double[Main.M];
 		
-		public static double getRandomNumber(){
-			double output = generateUniformNumber();
+		public static double getUniformRandomNumber(){
+			double output = generateUniformRandomNumber();
 			return output;
 		}
 		
-		public static double getParetoRandomNumber() {
-			double ratio = (double)Main.a / 100;
+		public static double getParedoRandomNumber(){
+			int percentile;
+			double uniRandom = generateUniformRandomNumber();
+			System.out.println("uniRandom = " + uniRandom);
+			percentile = Arrays.binarySearch(array, uniRandom);
 			
-			
+			if (percentile < 0) {
+				percentile = -1 * percentile - 1;
+			}
+						
+			return percentile + 1;
 		}
 		
-		
-		// Preprocessing to fill in array of size M with the 
-		private static void generateParetoSpread(){
-			double ratio = (double)Main.a / 100;
-			double doubleM = (double) Main.M;
-			int index = Main.M - 1;
+		public static String getParedoArray(){
+			return Arrays.toString(array);
+		}
+				
+		private static void generateParedoSpread(){
 			
-			double leftoverProb = 1.0;
-
-			int groupSize = (int)Math.ceil(M * ratio);
-			double prob = doubleM * (1.0 - ratio) / groupSize;
-			
-			for (int i = 0; i < groupSize; i++, index--) {
-				array[index] = prob;
+			double ratioA = (double)Main.a / 100;
+			double ratioB = (double)(100 - Main.a)/ 100;
+			double money = (double) Main.M;
+			double people = array.length;
+			double depth = Math.ceil(Math.log(5.0/people) / Math.log(ratioB));
+			double indMoney;
+			int topIndex = array.length - 1;
+						
+			for (int i = 0; i < depth; i++){
+				
+				//update difference
+				indMoney = Math.floor(money * ratioB) / Math.ceil(people * ratioA);
+				people = Math.floor(people * ratioB);
+				
+				for (; topIndex >= people; topIndex--, money -= indMoney) {
+					array[topIndex] = money / Main.M;
+				}
+				
+				indMoney = Math.floor((money) * ratioB) / Math.ceil(people * ratioA);				
 			}
 			
-			leftoverProb = leftoverProb - prob;
+			indMoney = money / people;
 			
-			// need to go from tail to head, filling in the probabilities
-			// can it be calculated ahead of time what the path would be to each index?
-			// if so, I'll just use a^currentDepth * (1.0-a) until I reach the final group (at the most left).
-			
-			
-			
+			// remaining cells get an equal share of the remainder
+			for(; topIndex >= 0; topIndex--, money -= indMoney) {
+				array[topIndex] = money / Main.M;			}
 		}
 		
-		private static double generateUniformNumber() {
+		private static double generateUniformRandomNumber() {
 			
 			long m = 2147483648L;
 			long c = 0x3039;
