@@ -1,9 +1,10 @@
+import java.util.Comparator;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Random;
 
 
-public class Job {
+public class Job implements Comparable<Job>{
 	
 	int processingTime;
 	JobType type;
@@ -11,7 +12,7 @@ public class Job {
 	List<Machine> allMachines;
 	
 	/**
-	 * returns a job of a certain type (A, B, or C), with a defined processing time,
+	 * Creates a single job of a certain type (A, B, or C), with a defined processing time,
 	 * and a set of machines capable of processing it.
 	 * @param machines
 	 */
@@ -31,7 +32,7 @@ public class Job {
 			type = JobType.A;
 		} else if (rand.nextInt(3)==0) {// 1/3 probability
 			type = JobType.B;
-		} else {// 1/6 probability
+		} else {// remaining 1/6 probability
 			type = JobType.C;
 		}
 	}
@@ -39,12 +40,14 @@ public class Job {
 	private void assignProcessingTime(){
 	
 		if (this.type == JobType.A){
-			
 			// range = [11,20]
+			this.processingTime = Main.RandomNumberGenerator.getUniformRandomNumber(11, 20);
 		} else if (this.type == JobType.B) {
-			// range = [11,20]			
+			// range = [1,10]			
+			this.processingTime = Main.RandomNumberGenerator.getUniformRandomNumber(1, 10);
 		} else { // Type C
 			// range = [1,99]
+			this.processingTime = Main.RandomNumberGenerator.getUniformRandomNumber(1, 99);
 		}
 	}
 	
@@ -55,7 +58,7 @@ public class Job {
 			// while we have less than 4 capable machines, randomly add machines to subset.
 			while (capableMachines.size() < 4){
 				
-				int randomIndex = //TODO;
+				int randomIndex = Main.RandomNumberGenerator.getUniformRandomNumber(0, 7);
 				capableMachines.add(allMachines.get(randomIndex));
 			}
 		} else {// types A or C
@@ -75,7 +78,33 @@ public class Job {
 		
 		// go over all machines and add them at given probability 
 		for (Machine machine : allMachines) {
-			//TODO	
+			if (Main.RandomNumberGenerator.getUniformRandomNumber() < probability) {
+				this.capableMachines.add(machine);
+			}
 		}
 	}
+
+	@Override
+	public int compareTo(Job job) {
+		return Integer.compare(this.capableMachines.size(), job.capableMachines.size());
+	}
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

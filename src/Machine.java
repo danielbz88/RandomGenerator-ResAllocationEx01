@@ -6,7 +6,6 @@ public class Machine {
 	
 	public Machine(){
 		
-		//TODO: implement
 		this.load = 0;
 		jobsQueue = new PriorityQueue<Job>();
 	}
@@ -16,8 +15,8 @@ public class Machine {
 	}
 		
 	public void addJob(Job nextJob){
-		
-//		TODO: Implement
+		jobsQueue.add(nextJob);
+		this.load = this.load + nextJob.processingTime;
 	}
 	
 	// Returns null if Queue is empty.

@@ -11,7 +11,8 @@ public class Main {
 //		System.out.println(RandomNumberGenerator.getParedoArray());
 
 		for (int i = 0; i < 20; i++){
-			System.out.println("Percentile = " + RandomNumberGenerator.getParedoRandomNumber() + "%");
+//			System.out.println("Percentile = " + RandomNumberGenerator.getParedoRandomNumber() + "%");
+//			System.out.println(RandomNumberGenerator.getUniformRandomNumber(11, 20));
 		}
 	}
 	
@@ -27,7 +28,6 @@ public class Main {
 		public static int getParedoRandomNumber(){
 			int percentile;
 			double uniRandom = generateUniformRandomNumber();
-//			System.out.println("uniRandom = " + uniRandom);
 			percentile = Arrays.binarySearch(array, uniRandom);
 			
 			if (percentile < 0) {
@@ -86,6 +86,13 @@ public class Main {
 //			double output = (double)(z >> 30);
 			
 			return output;
+		}
+
+		public static int getUniformRandomNumber(int low, int high) {
+			double rand = getUniformRandomNumber();
+			double output = rand * (high - low) + low;
+			
+			return (int) Math.round(output);
 		}
 	}
 }
