@@ -121,7 +121,7 @@ public class Simulator {
 		// First row
 		table[0][2] = "Arb order";
 		table[0][3] = "Arb order";
-		table[0][4] = "Sorted StoL";
+		table[0][4] = "     Sorted StoL";
 		table[0][5] = "Sorted StoL";
 		table[0][6] = "Sorted LtoS";
 		table[0][7] = "Sorted LtoS";
@@ -129,11 +129,11 @@ public class Simulator {
 		// Second row
 		table[1][1] = "Sigma Length"; 
 		table[1][2] = "Max Load";
-		table[1][3] = "Max Load / Min Load";
+		table[1][3] = "Max L / Min L";
 		table[1][4] = "Max Load";
-		table[1][5] = "Max Load / Min Load";
-		table[1][6] = "Max Load";
-		table[1][7] = "Max Load / Min Load";
+		table[1][5] = "   Max L / Min L";
+		table[1][6] = "\tMax Load";
+		table[1][7] = "\tMax L / Min L";
 		
 		return table;
 	}
@@ -187,13 +187,16 @@ public class Simulator {
 
 		// Assign jobs to machines
 		assignJobs();
+		
+		DecimalFormat df2 = new DecimalFormat(".###");
+
 
 		// Update row 'run + 1', in columns 2 and 3
 		int maxLoad = getMaxLoad();
 		int minLoad = getMinLoad();		
 		
 		outputTable[run + 1][2] = Integer.toString(maxLoad);
-		outputTable[run + 1][3] = Double.toString(((double)maxLoad) / minLoad);
+		outputTable[run + 1][3] = df2.format(((double)maxLoad) / minLoad);
 		Simulator.maxLoadSumArb += maxLoad;
 		Simulator.minLoadSumArb += minLoad;
 	}
@@ -204,12 +207,14 @@ public class Simulator {
 
 		// Assign jobs to machines
 		assignJobs();
+		
+		DecimalFormat df2 = new DecimalFormat(".###");
 
 		int maxLoad = getMaxLoad();
 		int minLoad = getMinLoad();		
 
 		outputTable[run + 1][4] = Integer.toString(maxLoad);
-		outputTable[run + 1][5] = Double.toString(((double)maxLoad) / minLoad);
+		outputTable[run + 1][5] = df2.format(((double)maxLoad) / minLoad);
 		Simulator.maxLoadSumSToL += maxLoad;
 		Simulator.minLoadSumSToL += minLoad;
 	}
@@ -219,12 +224,14 @@ public class Simulator {
 		// Update row 'run + 1', in columns 6 and 7
 		// Assign jobs to machines
 		assignJobs();
+		
+		DecimalFormat df2 = new DecimalFormat(".###");
 
 		int maxLoad = getMaxLoad();
 		int minLoad = getMinLoad();		
 
 		outputTable[run + 1][6] = Integer.toString(maxLoad);
-		outputTable[run + 1][7] = Double.toString(((double)maxLoad) / minLoad);
+		outputTable[run + 1][7] = df2.format(((double)maxLoad) / minLoad);
 		Simulator.maxLoadSumLToS += maxLoad;
 		Simulator.minLoadSumLToS += minLoad;
 	}
@@ -249,23 +256,18 @@ public class Simulator {
 		fillInMatrixSortedLToS(table, run);
 		
 		
-		DecimalFormat df2 = new DecimalFormat(".##");
+		DecimalFormat df2 = new DecimalFormat(".###");
 
 		
 		// Fill in all averages (last row)
 		table[12][1] = Integer.toString(Simulator.sumOfAllProcTimes);
 		table[12][2] = Integer.toString(Simulator.maxLoadSumArb);
-		table[12][3] = Double.toString(((double)Simulator.maxLoadSumArb) / Simulator.minLoadSumArb);
+		table[12][3] = df2.format(((double)Simulator.maxLoadSumArb) / Simulator.minLoadSumArb);
 		table[12][4] = Integer.toString(Simulator.maxLoadSumSToL);
-		table[12][5] = Double.toString(((double)Simulator.maxLoadSumSToL) / Simulator.minLoadSumSToL);
+		table[12][5] = df2.format(((double)Simulator.maxLoadSumSToL) / Simulator.minLoadSumSToL);
 		table[12][6] = Integer.toString(Simulator.maxLoadSumLToS);
-		table[12][7] = Double.toString(((double)Simulator.maxLoadSumLToS) / Simulator.minLoadSumLToS);
-		table[12][7] = df2.format((((double)Simulator.maxLoadSumLToS) / Simulator.minLoadSumLToS));
+		table[12][7] = df2.format(((double)Simulator.maxLoadSumLToS) / Simulator.minLoadSumLToS);
 				
-	}
-	
-	private static void fillInColumns(String[][] matrix, String string, int row, int col) {
-		matrix[row][col] = string;
 	}
 }
 

@@ -10,6 +10,10 @@ public class FormattedTablePrint {
                 	System.out.print("\t");
                 }
                 
+                if (i > 1 && j >= 3) {
+                	System.out.print("\t");
+                }
+                
                 if (i == 1) {
                 	System.out.print("   ");
                 }
