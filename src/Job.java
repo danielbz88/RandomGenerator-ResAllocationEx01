@@ -29,11 +29,19 @@ public class Job implements Comparable<Job>{
 		Random rand = new Random();
 		
 		// Probability of belonging to classes A, B and C are: 1/2, 1/3 and 1/6 respectively.
-		if (rand.nextInt(2)==0) {// 1/2 probability
+//		if (rand.nextInt(2)==0) {// 1/2 probability
+//			type = JobType.A;
+//		} else if (rand.nextInt(3)==0) {// 1/3 probability
+//			type = JobType.B;
+//		} else {// remaining 1/6 probability
+//			type = JobType.C;
+//		}
+		
+		if (rand.nextInt(6)==0) {// 1/6 probability
 			type = JobType.A;
 		} else if (rand.nextInt(3)==0) {// 1/3 probability
 			type = JobType.B;
-		} else {// remaining 1/6 probability
+		} else {// remaining 1/2 probability
 			type = JobType.C;
 		}
 	}

@@ -48,24 +48,25 @@ public class Simulator {
 //		System.out.println(Arrays.deepToString(outputTable));
 		FormattedTablePrint.printArray(outputTable);
 		System.out.println();
-
 	}
 
 	private static void assignJobs(){
-		int load = Integer.MAX_VALUE;
+		
+		clearAllMachineQueues();
+		
+		int minLoad = Integer.MAX_VALUE;
 		Machine currMachine = null;
 
 		// for each job, find capable machine with minimal load and add job to it's queue
 		for (Job job : jobs) {
-			load = Integer.MAX_VALUE;
+			minLoad = Integer.MAX_VALUE;
 			currMachine = null;
 			
 			// go over capable machines and find machine with minimal load
 			for (Machine machine : job.capableMachines) {
-				if (machine.getLoad() < load){
+				if (machine.getLoad() < minLoad){
 					
-					
-					load = machine.getLoad();
+					minLoad = machine.getLoad();
 					currMachine = machine;					
 				}
 			}
@@ -75,7 +76,16 @@ public class Simulator {
 		}
 
 		System.out.println();
+	}
 
+	private static void clearAllMachineQueues() {
+		
+		for (Machine machine : Simulator.machines) {
+			machine.clearQueue();
+		}
+		
+		System.out.println();
+		
 	}
 
 	private static void initiateMachines(){	
@@ -94,11 +104,15 @@ public class Simulator {
 		}		
 	}
 
-	// Sort jobs according to number of capable machines. Small to large.
+//	 Sort jobs according to number of capable machines. Small to large.
 	private static void sortJobsSmallToLarge(){
 		Collections.sort(jobs, 
 				(job01, job02) -> job01.compareTo(job02));
 	}
+	
+//	private static void sortJobsSmallToLarge() {
+//		jobs.sort(c);
+//	}
 
 	// Sort jobs according to process length. Large to small.
 	private static void sortJobsLargeToSmall(){
@@ -127,7 +141,7 @@ public class Simulator {
 		table[0][7] = "Sorted LtoS";
 
 		// Second row
-		table[1][1] = "Sigma Length"; 
+		table[1][1] = "Total PT"; 
 		table[1][2] = "Max Load";
 		table[1][3] = "Max L / Min L";
 		table[1][4] = "Max Load";
@@ -158,11 +172,6 @@ public class Simulator {
 		for (Machine machine : Simulator.machines){
 			if (machine.getLoad() < minLoad) {
 				minLoad = machine.getLoad();
-			}
-			
-			//TODO: remove
-			if (machine.getLoad() == 0){
-				System.out.println();
 			}
 		}
 		
@@ -243,15 +252,31 @@ public class Simulator {
 		// Fill Matrix/Table with data (arbitrary)
 		fillInMatrixArbitrary(table, run);
 
+		System.out.println("Arbitrary");
+		
+		printJobMachines();
+		printJobLength();
+		
+		System.out.println("Sorted small machine set to large");
+		
 		// Sort Small to Large
 		sortJobsSmallToLarge();
 
+		printJobMachines();
+		printJobLength();
+		
 		// Fill Matrix/Table with data (Small to Large)
 		fillInMatrixSortedSToL(table, run);
 
 		// Sort Large to Small
 		sortJobsLargeToSmall();
 
+		System.out.println("Sorted long time to short");
+		
+		printJobMachines();
+		printJobLength();
+
+		
 		// Fill Matrix/Table with data (Large to Small)
 		fillInMatrixSortedLToS(table, run);
 		
@@ -260,14 +285,36 @@ public class Simulator {
 
 		
 		// Fill in all averages (last row)
-		table[12][1] = Integer.toString(Simulator.sumOfAllProcTimes);
-		table[12][2] = Integer.toString(Simulator.maxLoadSumArb);
+		table[12][1] = Integer.toString(Simulator.sumOfAllProcTimes / 10);
+		table[12][2] = Integer.toString(Simulator.maxLoadSumArb / 10);
 		table[12][3] = df2.format(((double)Simulator.maxLoadSumArb) / Simulator.minLoadSumArb);
-		table[12][4] = Integer.toString(Simulator.maxLoadSumSToL);
+		table[12][4] = Integer.toString(Simulator.maxLoadSumSToL / 10);
 		table[12][5] = df2.format(((double)Simulator.maxLoadSumSToL) / Simulator.minLoadSumSToL);
-		table[12][6] = Integer.toString(Simulator.maxLoadSumLToS);
+		table[12][6] = Integer.toString(Simulator.maxLoadSumLToS / 10);
 		table[12][7] = df2.format(((double)Simulator.maxLoadSumLToS) / Simulator.minLoadSumLToS);
 				
+	}
+	
+	
+	private static void printJobMachines(){
+		
+		System.out.println("Job Machines");
+		
+		for (Job job : Simulator.jobs) {
+			System.out.print(Integer.toString(job.capableMachines.size()) + ", ");
+		}
+		System.out.println();
+		System.out.println("============================================================");
+	}
+	private static void printJobLength(){
+		
+		System.out.println("Job Lengths");
+		
+		for (Job job : Simulator.jobs) {
+			System.out.print(Integer.toString(job.processingTime) + ", ");
+		}
+		System.out.println();
+		System.out.println("============================================================");
 	}
 }
 

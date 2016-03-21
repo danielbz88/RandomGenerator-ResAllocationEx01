@@ -25,4 +25,9 @@ public class Machine {
 //		TODO: Implement
 		return jobsQueue.poll();
 	}
+
+	public void clearQueue() {
+		jobsQueue.clear();
+		this.load = 0;
+	}
 }
