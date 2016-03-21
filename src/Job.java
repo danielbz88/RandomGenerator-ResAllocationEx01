@@ -18,6 +18,7 @@ public class Job implements Comparable<Job>{
 	 */
 	public Job(List<Machine> machines){
 		this.allMachines = machines;
+		this.capableMachines = new HashSet<Machine>();
 		assignJobType();
 		assignProcessingTime();
 		assignCapableMachines(machines);
@@ -67,7 +68,7 @@ public class Job implements Comparable<Job>{
 			if (this.type == JobType.A){
 				probability = 0.5;
 			} else { // Type C
-				probability = 1/3;
+				probability = (double) 1/3;
 			}
 			
 			addMachines(probability, allMachines);
@@ -77,16 +78,22 @@ public class Job implements Comparable<Job>{
 	private void addMachines(double probability, List<Machine> allMachines){
 		
 		// go over all machines and add them at given probability 
-		for (Machine machine : allMachines) {
-			if (Main.RandomNumberGenerator.getUniformRandomNumber() < probability) {
-				this.capableMachines.add(machine);
-			}
+		while (this.capableMachines.size() == 0){
+			for (Machine machine : allMachines) {
+				if (Main.RandomNumberGenerator.getUniformRandomNumber() < probability) {
+					this.capableMachines.add(machine);
+				}
+			}	
 		}
 	}
 
 	@Override
 	public int compareTo(Job job) {
 		return Integer.compare(this.capableMachines.size(), job.capableMachines.size());
+	}
+
+	public int processingCompareTo(Job job01) {
+		return Integer.compare(this.processingTime, job01.processingTime);
 	}
 }
 

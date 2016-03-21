@@ -8,12 +8,14 @@ public class Main {
 	public static void main(String []args) {
 		
 		RandomNumberGenerator.generateParedoSpread();
-//		System.out.println(RandomNumberGenerator.getParedoArray());
+		System.out.println(RandomNumberGenerator.getParedoArray());
 
-		for (int i = 0; i < 20; i++){
+//		for (int i = 0; i < 20; i++){
 //			System.out.println("Percentile = " + RandomNumberGenerator.getParedoRandomNumber() + "%");
 //			System.out.println(RandomNumberGenerator.getUniformRandomNumber(11, 20));
-		}
+//		}
+		
+		Simulator.runSimulation();
 	}
 	
 	public static class RandomNumberGenerator {
